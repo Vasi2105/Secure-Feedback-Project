@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="dark transition-all duration-500">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Feedback-uri Admin (Dark Mode)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class' };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+      :root { color-scheme: dark; }
+      body { font-family: "Poppins", sans-serif; }
+      @keyframes fade {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fade 0.5s ease-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-gray-100 transition-all duration-500">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 animate-fade-in">
+      <!-- Logo & Titlu -->
+      <div class="flex items-center space-x-4 mb-6">
+        <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" alt="Logo" class="w-10 h-10">
+        <h1 class="text-3xl font-bold">📋 Feedback-uri primite</h1>
+      </div>
+
+      <!-- (Am scos butonul Toggle) -->
+
+      <!-- Căutare -->
+      <input
+        type="text"
+        id="search"
+        placeholder="Caută feedback..."
+        class="mb-6 p-2 w-full max-w-md rounded border border-gray-700 bg-gray-800 text-gray-100"
+      />
+
+      <!-- Tabel -->
+      <div class="overflow-x-auto w-full max-w-4xl">
+        <table class="w-full border border-gray-700">
+          <thead>
+            <tr class="bg-gray-700">
+              <th class="px-4 py-2 text-left">Nume</th>
+              <th class="px-4 py-2 text-left">Mesaj</th>
+            </tr>
+          </thead>
+          <tbody id="feedbackTable">
+            {% for rowid, username, message in feedbacks %}
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2 break-words">
+                {% if admin %}
+                <form
+                  method="POST"
+                  action="/delete-feedback"
+                  onsubmit="return confirm('Ești sigur că vrei să ștergi?')"
+                  style="display:inline; margin-right:10px;"
+                >
+                  <input type="hidden" name="id" value="{{ rowid }}">
+                  <button class="text-red-400 hover:underline">🗑️</button>
+                </form>
+                {% endif %}
+                <strong>{{ username or 'anonim' }}</strong>
+              </td>
+              <td class="px-4 py-2 break-words">
+                {{ message }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Linkuri -->
+      <div class="mt-6 flex flex-col sm:flex-row gap-4">
+        {% if not admin%}
+        <a href="/" class="px-4 py-2 bg-gray-800 text-white rounded border border-gray-700 hover:bg-gray-700 transition">
+          ⏪ Înapoi la formular
+          {% endif %}
+        </a>
+        {% if admin %}
+        <a href="/export-csv" class="px-4 py-2 bg-gray-800 text-white rounded border border-gray-700 hover:bg-gray-700 transition">
+          ⬇️ Exportă CSV
+        </a>
+        <a href="/export-json" class="px-4 py-2 bg-gray-800 text-white rounded border border-gray-700 hover:bg-gray-700 transition">
+          📦 Exportă JSON
+        </a>
+        {% endif %}
+        {% if admin %}
+<a
+  href="/admin-logout"
+  class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 hover:scale-105 hover:shadow-lg transition-transform duration-300"
+>
+  🚪 Logout
+</a>
+{% endif %}
+      </div>
+    </div>
+
+    <script>
+      // Cautare live (poți păstra/șterge după preferință)
+      document.getElementById("search").addEventListener("input", function () {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll("#feedbackTable tr").forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(query) ? "" : "none";
+        });
+      });
+    </script>
+  </body>
+</html>

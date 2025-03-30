@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-all duration-500">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Feedback trimis</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      @keyframes pop {
+        0% { transform: scale(0.6); opacity: 0 }
+        100% { transform: scale(1); opacity: 1 }
+      }
+      .animate-pop {
+        animation: pop 0.4s ease-out;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-all duration-500">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 text-center animate-fade-in">
+      <!-- Icon animat -->
+      <div class="text-6xl mb-4 animate-pop">✅</div>
+
+      <!-- Titlu și mesaj -->
+      <h1 class="text-2xl font-bold mb-2">Mulțumim pentru feedback, {{ username or 'anonim' }}!</h1>
+      <p class="mb-6 text-lg">Mesajul tău a fost salvat cu succes 💾</p>
+
+      <!-- Butoane -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-transform duration-300">
+          ⏪ Trimite alt feedback
+        </a>
+        <a href="/all_feedbacks" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 hover:scale-105 hover:shadow-lg transition-transform duration-300">
+          📋 Vezi toate feedback-urile
+        </a>
+      </div>
+    </div>
+
+    <script>
+      const root = document.documentElement;
+      const body = document.body;
+
+      if (localStorage.getItem("theme") === "dark") {
+        root.classList.add('dark');
+        body.style.backgroundColor = "#111827";
+        body.style.color = "#f3f4f6";
+      }
+    </script>
+  </body>
+</html>
+
